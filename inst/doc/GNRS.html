@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Brian Maitner" />
+
+<meta name="date" content="2020-04-23" />
+
+<title>GNRS</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">GNRS</h1>
+<h4 class="author">Brian Maitner</h4>
+<h4 class="date">2020-04-23</h4>
+
+
+
+<div id="geographic-name-resolution-service" class="section level2">
+<h2>Geographic Name Resolution Service</h2>
+<p>The package <code>GNRS</code> is designed to interact with the Geographic Name Resolution Service of the Botanical Information and Ecology Network.</p>
+<p>#Installing GNRS</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(devtools)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">install_github</span>(<span class="st">&quot;EnquistLab/RGNRS/GNRS&quot;</span>)</a></code></pre></div>
+<p>#The easiest case: one political division</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">library</span>(GNRS)</a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw">GNRS_super_simple</span>(<span class="dt">country =</span>  <span class="st">&quot;United States&quot;</span>, </a>
+<a class="sourceLine" id="cb2-3" title="3">                 <span class="dt">state_province =</span> <span class="st">&quot;Arizona&quot;</span>,</a>
+<a class="sourceLine" id="cb2-4" title="4">                 <span class="dt">county_parish =</span> <span class="st">&quot;Pima County&quot;</span>)</a></code></pre></div>
+<pre><code>##        id                       poldiv_full country_verbatim
+## 1 2282338 United States@Arizona@Pima County    United States
+##   state_province_verbatim county_parish_verbatim       country state_province
+## 1                 Arizona            Pima County United States        Arizona
+##   county_parish country_id state_province_id county_parish_id
+## 1          Pima    6252001           5551752          5308878
+##   match_method_country match_method_state_province match_method_county_parish
+## 1  exact standard name                  exact name                 exact name
+##   match_score_country match_score_state_province match_score_county_parish
+## 1                                                                         
+##   poldiv_submitted poldiv_matched match_status user_id
+## 1    county_parish  county_parish   full match        
+##                                job country_iso state_province_iso
+## 1 job_20200423_1145570807554_11997          US                 AZ
+##   county_parish_iso
+## 1               019</code></pre>
+<p>#Multiple political divisions</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co">#First, we&#39;ll grab some occurrence records from BIEN</span></a>
+<a class="sourceLine" id="cb4-2" title="2"></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="kw">library</span>(BIEN)</a></code></pre></div>
+<pre><code>## Loading required package: RPostgreSQL</code></pre>
+<pre><code>## Loading required package: DBI</code></pre>
+<pre><code>## Type vignette(&quot;BIEN&quot;) or vignette(&quot;BIEN_tutorial&quot;) to get started</code></pre>
+<pre><code>## </code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">xs &lt;-<span class="st"> </span><span class="kw">BIEN_occurrence_species</span>(<span class="dt">species =</span> <span class="st">&quot;Xanthium strumarium&quot;</span>, <span class="dt">political.boundaries =</span> T)</a>
+<a class="sourceLine" id="cb9-2" title="2"></a>
+<a class="sourceLine" id="cb9-3" title="3"></a>
+<a class="sourceLine" id="cb9-4" title="4"><span class="co">#The GNRS function expects 4 columns as input, but all are optional.</span></a>
+<a class="sourceLine" id="cb9-5" title="5"><span class="co">#If you ever forget, you can use the function GNRS_template as a quick lookup, or to populate.</span></a>
+<a class="sourceLine" id="cb9-6" title="6"></a>
+<a class="sourceLine" id="cb9-7" title="7">xs_query&lt;-<span class="kw">GNRS_template</span>(<span class="dt">nrow =</span> <span class="kw">nrow</span>(xs))</a>
+<a class="sourceLine" id="cb9-8" title="8"></a>
+<a class="sourceLine" id="cb9-9" title="9">xs_query<span class="op">$</span>country &lt;-<span class="st"> </span>xs<span class="op">$</span>country</a>
+<a class="sourceLine" id="cb9-10" title="10">xs_query<span class="op">$</span>state_province &lt;-<span class="st"> </span>xs<span class="op">$</span>state_province</a>
+<a class="sourceLine" id="cb9-11" title="11">xs_query<span class="op">$</span>county_parish &lt;-<span class="st"> </span>xs<span class="op">$</span>county</a>
+<a class="sourceLine" id="cb9-12" title="12"></a>
+<a class="sourceLine" id="cb9-13" title="13"></a>
+<a class="sourceLine" id="cb9-14" title="14">xs_gnrs_results &lt;-<span class="st"> </span><span class="kw">GNRS</span>(xs_query)</a>
+<a class="sourceLine" id="cb9-15" title="15"></a>
+<a class="sourceLine" id="cb9-16" title="16"><span class="kw">head</span>(xs_gnrs_results)</a></code></pre></div>
+<pre><code>##        id                         poldiv_full country_verbatim
+## 1 2282970 United States@New Mexico@Los Alamos    United States
+## 2 2282969    United States@New Mexico@Hidalgo    United States
+## 3 2282968    United States@New Mexico@Harding    United States
+## 4 2282933         United States@Missouri@Pike    United States
+## 5 2282688    United States@Arizona@Santa Cruz    United States
+## 6 2282973       United States@New Mexico@Quay    United States
+##   state_province_verbatim county_parish_verbatim       country state_province
+## 1              New Mexico             Los Alamos United States     New Mexico
+## 2              New Mexico                Hidalgo United States     New Mexico
+## 3              New Mexico                Harding United States     New Mexico
+## 4                Missouri                   Pike United States       Missouri
+## 5                 Arizona             Santa Cruz United States        Arizona
+## 6              New Mexico                   Quay United States     New Mexico
+##   county_parish country_id state_province_id county_parish_id
+## 1    Los Alamos    6252001           5481136          5476834
+## 2       Hidalgo    6252001           5481136          5471293
+## 3       Harding    6252001           5481136          5470675
+## 4          Pike    6252001           4398678          4403228
+## 5    Santa Cruz    6252001           5551752          5313135
+## 6          Quay    6252001           5481136          5485605
+##   match_method_country match_method_state_province match_method_county_parish
+## 1  exact standard name                  exact name     exact ascii short name
+## 2  exact standard name                  exact name     exact ascii short name
+## 3  exact standard name                  exact name     exact ascii short name
+## 4  exact standard name                  exact name     exact ascii short name
+## 5  exact standard name                  exact name     exact ascii short name
+## 6  exact standard name                  exact name     exact ascii short name
+##   match_score_country match_score_state_province match_score_county_parish
+## 1                                                                         
+## 2                                                                         
+## 3                                                                         
+## 4                                                                         
+## 5                                                                         
+## 6                                                                         
+##   poldiv_submitted poldiv_matched match_status user_id
+## 1    county_parish  county_parish   full match        
+## 2    county_parish  county_parish   full match        
+## 3    county_parish  county_parish   full match        
+## 4    county_parish  county_parish   full match        
+## 5    county_parish  county_parish   full match        
+## 6    county_parish  county_parish   full match        
+##                                job country_iso state_province_iso
+## 1 job_20200423_1145036704478_18047          US                 NM
+## 2 job_20200423_1145036704478_18047          US                 NM
+## 3 job_20200423_1145036704478_18047          US                 NM
+## 4 job_20200423_1145036704478_18047          US                 MO
+## 5 job_20200423_1145036704478_18047          US                 AZ
+## 6 job_20200423_1145036704478_18047          US                 NM
+##   county_parish_iso
+## 1               028
+## 2               023
+## 3               021
+## 4               163
+## 5               023
+## 6               037</code></pre>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

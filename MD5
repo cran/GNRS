@@ -1,0 +1,17 @@
+53d28044eced5688b877e9869b040509 *DESCRIPTION
+2212d76fab87cae567a462601b18bc57 *LICENSE
+58a80ad16325b707098f40cc6cfaeb3b *NAMESPACE
+653d174e4896c03ae144c84b9de3711c *NEWS
+808a099c7863a74007de14fedc447b63 *R/description.R
+642dfa866f191d57b20efd0cf1bfb9a9 *R/gnrs.R
+35a5ff60f6f0613b93ffdfcc2a0ab0e6 *R/gnrs_super_simple.R
+bc044d1cdba29e62fa30831603be5953 *R/gnrs_template.R
+f3b03b78f43310f5747a18a69fbd47fb *build/vignette.rds
+a4c9f8ad107a96d7a85c0e5d98ae078f *inst/doc/GNRS.R
+076bf75079c5e0842391e3c3ec4545a4 *inst/doc/GNRS.Rmd
+aad5ba84a5d635768fa3a4135f43d227 *inst/doc/GNRS.html
+7de83a02e7f3c0527229fea0c7777e7b *inst/extdata/gnrs_testfile.csv
+9269ea98b54a845e345ff87d2afeb655 *man/GNRS.Rd
+e0d532b3ce105e4bf722f754c5f19c31 *man/GNRS_super_simple.Rd
+b115f96e7834786d009c06396f45542e *man/GNRS_template.Rd
+076bf75079c5e0842391e3c3ec4545a4 *vignettes/GNRS.Rmd
