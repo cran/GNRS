@@ -4,7 +4,8 @@
 #' @param country A single country or a vector of countries.  If a vector, length must equal length of species vector.
 #' @param state_province A single state/province or a vector of states.  If a vector, length must equal length of species vector.
 #' @param county_parish A single county/parish or a vector of counties.  If a vector, length must equal length of species vector.
-#' @param user_id A single user id to be appended to results (optional).
+#' @param user_id A single identifier or vector of identifiers.  This field is assigned if not provided and is used to maintain record order.
+#' @note The fields the GNRS takes as input are titled "country", "state_province", and "county_parish" for simplicity, but these field actually refer to 0th-, 1st-, and 2nd-order political division, respectively. In the case of some exceptions (e.g. the UK) this distinction becomes important (e.g. Ireland is a 1st-order poltical division and should be treated as a "state_province" and cannot be matched as a country.)
 #' @return Dataframe containing GNRS results.
 #' @export
 #' @examples {
@@ -16,7 +17,7 @@
 #'              county_parish = "Pima County")
 #' 
 #' }
-GNRS_super_simple <- function(country=NULL, state_province=NULL,county_parish=NULL,user_id=NULL){
+GNRS_super_simple <- function(country = NULL, state_province = NULL, county_parish = NULL, user_id = NULL ){
   
   
   #Check input for odd stuff
@@ -37,11 +38,12 @@ GNRS_super_simple <- function(country=NULL, state_province=NULL,county_parish=NU
   
   
   #Make template
-  template<-GNRS_template(nrow = max(length(country),length(state_province),length(county_parish)))
+  template <- GNRS_template(nrow = max(length(country),length(state_province),length(county_parish)))
   
   
   #Throw an error if user_id doesn't make sense
-  if((nrow(template)!=length(user_id)) & (length(user_id)!=1) & (!is.null(user_id)) ){stop(" user_id should be either i) null, ii) of length one, or iii) have the same length as your country/state/county vectors.")}
+  if((nrow(template)!=length(user_id)) &  (!is.null(user_id)) ){stop(" user_id should be either i) null or ii) have the same length as your country/state/county vectors.")}
+  if(!is.null(user_id)){  if(any(duplicated(user_id))){stop("user_id should be either null or populated by unique values")}         }
   
   
   #Populate fields as needed
@@ -65,13 +67,18 @@ GNRS_super_simple <- function(country=NULL, state_province=NULL,county_parish=NU
   #user_id
   if(!is.null(user_id)){
     template$user_id <- user_id  
-  }
+  }else{template$user_id <- 1:nrow(template)}
+
+  
+  #Get GNRS output
+  GNRS_out <- GNRS(template)
   
   
+  #Re-order output to match what was submitted #no longer needed since this is done by the GNRS function
+  #GNRS_out <- GNRS_out[match(table = GNRS_out$user_id,x = template$user_id),]
   
-  
-  return(GNRS(template))
-  
+  #Return output
+  return(GNRS_out)
   
 }
 ############

@@ -12,17 +12,33 @@
 
 <meta name="author" content="Brian Maitner" />
 
-<meta name="date" content="2020-04-23" />
+<meta name="date" content="2021-01-21" />
 
-<title>GNRS</title>
+<title>GNRS R package</title>
 
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -32,14 +48,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -48,9 +66,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -299,9 +317,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">GNRS</h1>
+<h1 class="title toc-ignore">GNRS R package</h1>
 <h4 class="author">Brian Maitner</h4>
-<h4 class="date">2020-04-23</h4>
+<h4 class="date">2021-01-21</h4>
 
 
 
@@ -309,109 +327,109 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h2>Geographic Name Resolution Service</h2>
 <p>The package <code>GNRS</code> is designed to interact with the Geographic Name Resolution Service of the Botanical Information and Ecology Network.</p>
 <p>#Installing GNRS</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(devtools)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">install_github</span>(<span class="st">&quot;EnquistLab/RGNRS/GNRS&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(devtools)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">install_github</span>(<span class="st">&quot;EnquistLab/RGNRS/GNRS&quot;</span>)</span></code></pre></div>
 <p>#The easiest case: one political division</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">library</span>(GNRS)</a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="kw">GNRS_super_simple</span>(<span class="dt">country =</span>  <span class="st">&quot;United States&quot;</span>, </a>
-<a class="sourceLine" id="cb2-3" title="3">                 <span class="dt">state_province =</span> <span class="st">&quot;Arizona&quot;</span>,</a>
-<a class="sourceLine" id="cb2-4" title="4">                 <span class="dt">county_parish =</span> <span class="st">&quot;Pima County&quot;</span>)</a></code></pre></div>
-<pre><code>##        id                       poldiv_full country_verbatim
-## 1 2282338 United States@Arizona@Pima County    United States
-##   state_province_verbatim county_parish_verbatim       country state_province
-## 1                 Arizona            Pima County United States        Arizona
-##   county_parish country_id state_province_id county_parish_id
-## 1          Pima    6252001           5551752          5308878
-##   match_method_country match_method_state_province match_method_county_parish
-## 1  exact standard name                  exact name                 exact name
-##   match_score_country match_score_state_province match_score_county_parish
-## 1                                                                         
-##   poldiv_submitted poldiv_matched match_status user_id
-## 1    county_parish  county_parish   full match        
-##                                job country_iso state_province_iso
-## 1 job_20200423_1145570807554_11997          US                 AZ
-##   county_parish_iso
-## 1               019</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(GNRS)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">GNRS_super_simple</span>(<span class="dt">country =</span>  <span class="st">&quot;United States&quot;</span>, </span>
+<span id="cb2-3"><a href="#cb2-3"></a>                 <span class="dt">state_province =</span> <span class="st">&quot;Arizona&quot;</span>,</span>
+<span id="cb2-4"><a href="#cb2-4"></a>                 <span class="dt">county_parish =</span> <span class="st">&quot;Pima County&quot;</span>)</span></code></pre></div>
+<pre><code>##                         poldiv_full country_verbatim state_province_verbatim
+## 1 United States@Arizona@Pima County    United States                 Arizona
+##   state_province_verbatim_alt county_parish_verbatim county_parish_verbatim_alt
+## 1                                        Pima County                       Pima
+##         country state_province county_parish country_id state_province_id
+## 1 United States        Arizona          Pima    6252001           5551752
+##   county_parish_id country_iso state_province_iso county_parish_iso geonameid
+## 1          5308878          US                 AZ               019   5308878
+##   gid_0   gid_1      gid_2 match_method_country match_method_state_province
+## 1   USA USA.3_1 USA.3.11_1  exact standard name                  exact name
+##   match_method_county_parish match_score_country match_score_state_province
+## 1                 exact name                                               
+##   match_score_county_parish poldiv_submitted poldiv_matched match_status
+## 1                              county_parish  county_parish   full match
+##   user_id
+## 1       1</code></pre>
 <p>#Multiple political divisions</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co">#First, we&#39;ll grab some occurrence records from BIEN</span></a>
-<a class="sourceLine" id="cb4-2" title="2"></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="kw">library</span>(BIEN)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">#First, we&#39;ll grab some occurrence records from BIEN</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">library</span>(BIEN)</span></code></pre></div>
 <pre><code>## Loading required package: RPostgreSQL</code></pre>
 <pre><code>## Loading required package: DBI</code></pre>
 <pre><code>## Type vignette(&quot;BIEN&quot;) or vignette(&quot;BIEN_tutorial&quot;) to get started</code></pre>
-<pre><code>## </code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">xs &lt;-<span class="st"> </span><span class="kw">BIEN_occurrence_species</span>(<span class="dt">species =</span> <span class="st">&quot;Xanthium strumarium&quot;</span>, <span class="dt">political.boundaries =</span> T)</a>
-<a class="sourceLine" id="cb9-2" title="2"></a>
-<a class="sourceLine" id="cb9-3" title="3"></a>
-<a class="sourceLine" id="cb9-4" title="4"><span class="co">#The GNRS function expects 4 columns as input, but all are optional.</span></a>
-<a class="sourceLine" id="cb9-5" title="5"><span class="co">#If you ever forget, you can use the function GNRS_template as a quick lookup, or to populate.</span></a>
-<a class="sourceLine" id="cb9-6" title="6"></a>
-<a class="sourceLine" id="cb9-7" title="7">xs_query&lt;-<span class="kw">GNRS_template</span>(<span class="dt">nrow =</span> <span class="kw">nrow</span>(xs))</a>
-<a class="sourceLine" id="cb9-8" title="8"></a>
-<a class="sourceLine" id="cb9-9" title="9">xs_query<span class="op">$</span>country &lt;-<span class="st"> </span>xs<span class="op">$</span>country</a>
-<a class="sourceLine" id="cb9-10" title="10">xs_query<span class="op">$</span>state_province &lt;-<span class="st"> </span>xs<span class="op">$</span>state_province</a>
-<a class="sourceLine" id="cb9-11" title="11">xs_query<span class="op">$</span>county_parish &lt;-<span class="st"> </span>xs<span class="op">$</span>county</a>
-<a class="sourceLine" id="cb9-12" title="12"></a>
-<a class="sourceLine" id="cb9-13" title="13"></a>
-<a class="sourceLine" id="cb9-14" title="14">xs_gnrs_results &lt;-<span class="st"> </span><span class="kw">GNRS</span>(xs_query)</a>
-<a class="sourceLine" id="cb9-15" title="15"></a>
-<a class="sourceLine" id="cb9-16" title="16"><span class="kw">head</span>(xs_gnrs_results)</a></code></pre></div>
-<pre><code>##        id                         poldiv_full country_verbatim
-## 1 2282970 United States@New Mexico@Los Alamos    United States
-## 2 2282969    United States@New Mexico@Hidalgo    United States
-## 3 2282968    United States@New Mexico@Harding    United States
-## 4 2282933         United States@Missouri@Pike    United States
-## 5 2282688    United States@Arizona@Santa Cruz    United States
-## 6 2282973       United States@New Mexico@Quay    United States
-##   state_province_verbatim county_parish_verbatim       country state_province
-## 1              New Mexico             Los Alamos United States     New Mexico
-## 2              New Mexico                Hidalgo United States     New Mexico
-## 3              New Mexico                Harding United States     New Mexico
-## 4                Missouri                   Pike United States       Missouri
-## 5                 Arizona             Santa Cruz United States        Arizona
-## 6              New Mexico                   Quay United States     New Mexico
-##   county_parish country_id state_province_id county_parish_id
-## 1    Los Alamos    6252001           5481136          5476834
-## 2       Hidalgo    6252001           5481136          5471293
-## 3       Harding    6252001           5481136          5470675
-## 4          Pike    6252001           4398678          4403228
-## 5    Santa Cruz    6252001           5551752          5313135
-## 6          Quay    6252001           5481136          5485605
-##   match_method_country match_method_state_province match_method_county_parish
-## 1  exact standard name                  exact name     exact ascii short name
-## 2  exact standard name                  exact name     exact ascii short name
-## 3  exact standard name                  exact name     exact ascii short name
-## 4  exact standard name                  exact name     exact ascii short name
-## 5  exact standard name                  exact name     exact ascii short name
-## 6  exact standard name                  exact name     exact ascii short name
-##   match_score_country match_score_state_province match_score_county_parish
-## 1                                                                         
-## 2                                                                         
-## 3                                                                         
-## 4                                                                         
-## 5                                                                         
-## 6                                                                         
-##   poldiv_submitted poldiv_matched match_status user_id
-## 1    county_parish  county_parish   full match        
-## 2    county_parish  county_parish   full match        
-## 3    county_parish  county_parish   full match        
-## 4    county_parish  county_parish   full match        
-## 5    county_parish  county_parish   full match        
-## 6    county_parish  county_parish   full match        
-##                                job country_iso state_province_iso
-## 1 job_20200423_1145036704478_18047          US                 NM
-## 2 job_20200423_1145036704478_18047          US                 NM
-## 3 job_20200423_1145036704478_18047          US                 NM
-## 4 job_20200423_1145036704478_18047          US                 MO
-## 5 job_20200423_1145036704478_18047          US                 AZ
-## 6 job_20200423_1145036704478_18047          US                 NM
-##   county_parish_iso
-## 1               028
-## 2               023
-## 3               021
-## 4               163
-## 5               023
-## 6               037</code></pre>
+<pre><code>## NOTE: Connections to the BIEN database may be limited for the next two weeks, and interruptions to existing connections may occur. Connectivity should be back to normal by Dec. 18, 2020.</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>xs &lt;-<span class="st"> </span><span class="kw">BIEN_occurrence_species</span>(<span class="dt">species =</span> <span class="st">&quot;Xanthium strumarium&quot;</span>, <span class="dt">political.boundaries =</span> T)</span>
+<span id="cb9-2"><a href="#cb9-2"></a></span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#The GNRS function expects 4 columns as input, but all are optional.</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#If you ever forget, you can use the function GNRS_template as a quick lookup, or to populate.</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a></span>
+<span id="cb9-7"><a href="#cb9-7"></a>xs_query&lt;-<span class="kw">GNRS_template</span>(<span class="dt">nrow =</span> <span class="kw">nrow</span>(xs))</span>
+<span id="cb9-8"><a href="#cb9-8"></a></span>
+<span id="cb9-9"><a href="#cb9-9"></a>xs_query<span class="op">$</span>country &lt;-<span class="st"> </span>xs<span class="op">$</span>country</span>
+<span id="cb9-10"><a href="#cb9-10"></a>xs_query<span class="op">$</span>state_province &lt;-<span class="st"> </span>xs<span class="op">$</span>state_province</span>
+<span id="cb9-11"><a href="#cb9-11"></a>xs_query<span class="op">$</span>county_parish &lt;-<span class="st"> </span>xs<span class="op">$</span>county</span>
+<span id="cb9-12"><a href="#cb9-12"></a></span>
+<span id="cb9-13"><a href="#cb9-13"></a></span>
+<span id="cb9-14"><a href="#cb9-14"></a>xs_gnrs_results &lt;-<span class="st"> </span><span class="kw">GNRS</span>(xs_query)</span>
+<span id="cb9-15"><a href="#cb9-15"></a></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="kw">head</span>(xs_gnrs_results)</span></code></pre></div>
+<pre><code>##                     poldiv_full country_verbatim state_province_verbatim
+## 1   United States@Alabama@Perry    United States                 Alabama
+## 2   United States@Alabama@Perry    United States                 Alabama
+## 3                      Greece@@           Greece                        
+## 4                 New Zealand@@      New Zealand                        
+## 5 United States@Arizona@Cochise    United States                 Arizona
+## 6                      Greece@@           Greece                        
+##   state_province_verbatim_alt county_parish_verbatim county_parish_verbatim_alt
+## 1                                              Perry                           
+## 2                                              Perry                           
+## 3                                                                              
+## 4                                                                              
+## 5                                            Cochise                           
+## 6                                                                              
+##         country state_province county_parish country_id state_province_id
+## 1 United States        Alabama         Perry    6252001           4829764
+## 2 United States        Alabama         Perry    6252001           4829764
+## 3        Greece                                  390903                  
+## 4   New Zealand                                 2186224                  
+## 5 United States        Arizona       Cochise    6252001           5551752
+## 6        Greece                                  390903                  
+##   county_parish_id country_iso state_province_iso county_parish_iso geonameid
+## 1          4082741          US                 AL               105   4082741
+## 2          4082741          US                 AL               105   4082741
+## 3                           GR                                         390903
+## 4                           NZ                                        2186224
+## 5          5290270          US                 AZ               003   5290270
+## 6                           GR                                         390903
+##   gid_0   gid_1      gid_2 match_method_country match_method_state_province
+## 1   USA USA.1_1 USA.1.53_1  exact standard name                  exact name
+## 2   USA USA.1_1 USA.1.53_1  exact standard name                  exact name
+## 3   GRC                     exact standard name                            
+## 4   NZL                     exact standard name                            
+## 5   USA USA.3_1  USA.3.2_1  exact standard name                  exact name
+## 6   GRC                     exact standard name                            
+##   match_method_county_parish match_score_country match_score_state_province
+## 1     exact ascii short name                                               
+## 2     exact ascii short name                                               
+## 3                                                                          
+## 4                                                                          
+## 5     exact ascii short name                                               
+## 6                                                                          
+##   match_score_county_parish poldiv_submitted poldiv_matched match_status
+## 1                              county_parish  county_parish   full match
+## 2                              county_parish  county_parish   full match
+## 3                                    country        country   full match
+## 4                                    country        country   full match
+## 5                              county_parish  county_parish   full match
+## 6                                    country        country   full match
+##   user_id
+## 1       1
+## 2       2
+## 3       3
+## 4       4
+## 5       5
+## 6       6</code></pre>
 </div>
 
 
