@@ -4,7 +4,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## ---- eval=FALSE--------------------------------------------------------------
 #  
 #  library(devtools)
-#  install_github("EnquistLab/RGNRS/GNRS")
+#  install_github("EnquistLab/RGNRS")
 #  
 #  
 
@@ -18,24 +18,24 @@ GNRS_super_simple(country =  "United States",
 
 ## -----------------------------------------------------------------------------
 
-#First, we'll grab some occurrence records from BIEN
+#First, we'll load the test data that are included with this package, gnrs_testfile
 
-library(BIEN)
-xs <- BIEN_occurrence_species(species = "Xanthium strumarium", political.boundaries = T)
+gnrs_testfile <- gnrs_testfile
 
+head(gnrs_testfile, n = 10)
 
-#The GNRS function expects 4 columns as input, but all are optional.
-#If you ever forget, you can use the function GNRS_template as a quick lookup, or to populate.
+## -----------------------------------------------------------------------------
 
-xs_query<-GNRS_template(nrow = nrow(xs))
+gnrs_results <- GNRS(gnrs_testfile)
 
-xs_query$country <- xs$country
-xs_query$state_province <- xs$state_province
-xs_query$county_parish <- xs$county
+#The standardized names are found in these columns:
+head(gnrs_results[c("country","state_province","county_parish")], n = 10)
 
 
-xs_gnrs_results <- GNRS(xs_query)
+## -----------------------------------------------------------------------------
 
-head(xs_gnrs_results)
+
+head(GNRS_template())
+
 
 

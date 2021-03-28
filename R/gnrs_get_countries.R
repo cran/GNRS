@@ -1,47 +1,46 @@
-#'Get metadata on current GNRS version
+#'Get metadata on countries
 #'
-#'Return metadata about the current GNRS version
-#' @return Dataframe containing current GNRS version number, build date, and code version.
+#'Return metadata about countries used by the GNRS
+#' @return Dataframe containing information on countries (e.g. iso code, fips code, continent, standardized name)
 #' @import RCurl
 #' @importFrom jsonlite toJSON fromJSON
 #' @export
 #' @examples \dontrun{
-#' GNRS_version_metadata <- GNRS_version()
+#' countries <- GNRS_get_countries()
 #' }
 #' 
-GNRS_version <- function(){
+GNRS_get_countries <- function(){
   
   # api url
   url = "http://vegbiendev.nceas.ucsb.edu:8875/gnrs_api.php" # production
   #url = "http://vegbiendev.nceas.ucsb.edu:9875/gnrs_api.php" # development
   
-  # set option mode.
-  mode <- "meta"		
-  
-  # Construct the request
-  headers <- list('Accept' = 'application/json', 'Content-Type' = 'application/json', 'charset' = 'UTF-8')
-  
+  # All we need to do is reset option mode.
+  # all other options will be ignored
+  mode <- "countrylist"		
+
   # Re-form the options json again
   # Note that only 'mode' is needed
   opts <- data.frame(c(mode))
   names(opts) <- c("mode")
-  opts_json <- toJSON(opts)
+  opts_json <- jsonlite::toJSON(opts)
   opts_json <- gsub('\\[','',opts_json)
   opts_json <- gsub('\\]','',opts_json)
   
-  # Make the options
-  # No data needed
+  # Input json requires only the option
   input_json <- paste0('{"opts":', opts_json, '}' )
+  
   
   # Construct the request
   headers <- list('Accept' = 'application/json', 'Content-Type' = 'application/json', 'charset' = 'UTF-8')
   
+  
   # Send the request again
   results_json <- postForm(url, .opts=list(postfields= input_json, httpheader=headers))
   
-  # Format the results
-  results <- fromJSON(results_json)
-  
+  # Display the results
+  results <- jsonlite::fromJSON(results_json)
+
   return(results)
   
-}#TNRS version
+} #GNRS version

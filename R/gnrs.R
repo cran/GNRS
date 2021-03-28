@@ -5,31 +5,26 @@
 #' @param batches NULL or Numeric.  Optional number of batches to divide the request into for parallel processing.
 #' @return Dataframe containing GNRS results.
 #' @note To create an empty and properly formatted dataframe, use GNRS_template()
-#' @note The fields the GNRS takes as input are titled "country", "state_province", and "county_parish" for simplicity, but these field actually refer to 0th-, 1st-, and 2nd-order political division, respectively. In the case of some exceptions (e.g. the UK) this distinction becomes important (e.g. Ireland is a 1st-order poltical division and should be treated as a "state_province" and cannot be matched as a country.)
+#' @note The fields the GNRS takes as input are titled "country", "state_province", and "county_parish" for simplicity, but these field actually refer to 0th-, 1st-, and 2nd-order political division, respectively. In the case of some exceptions (e.g. the UK) this distinction becomes important (e.g. Ireland is a 1st-order political division and should be treated as a "state_province" and cannot be matched as a country.)
 #' @import RCurl
 #' @importFrom jsonlite toJSON fromJSON
 #' @export
-#' @examples {
-#' gnrs_testfile <- 
-#' read.csv(system.file("extdata", "gnrs_testfile.csv", package = "GNRS", mustWork = TRUE),
-#' stringsAsFactors = FALSE)
-#'
+#' @examples\dontrun{
 #' results <- GNRS(political_division_dataframe = gnrs_testfile)
 #'   
 #' 
 #' }
 GNRS <- function(political_division_dataframe, batches = NULL){
   
-  ###############################################
-  # Example use of GNRS API
-  # By: Brad Boyle (bboyle@email.arizona.edu)
-  # Date: Feb. 19, 2019
-  ###############################################
+
+  # api url
+  url = "http://vegbiendev.nceas.ucsb.edu:8875/gnrs_api.php" # production
+  #url = "http://vegbiendev.nceas.ucsb.edu:9875/gnrs_api.php" # development
   
-  # URL for GNRS API
-  url = "http://vegbiendev.nceas.ucsb.edu:8875/gnrs_api.php"
-  #url = "http://vegbiendev.nceas.ucsb.edu:8875/gnrs_ws.php"
-  #url = "http://vegbiendev.nceas.ucsb.edu:9875/gnrs_ws.php" #development
+  #check that input is a data.frame
+  if(!inherits(political_division_dataframe,"data.frame")){
+    stop("political_division_dataframe should be a data.frame")
+  }
   
   
   #Check that user_id is populated properly, and populate if not
@@ -39,7 +34,7 @@ GNRS <- function(political_division_dataframe, batches = NULL){
   
   #check that batches makes sense
   
-  #check that it its either NULL or numeric
+  #check that batches is either NULL or numeric
   if(!is.null(batches) & !is.numeric(batches)){stop("Argument 'batches' must be either NULL or a positive integer. ")}
   
   #check that it is a whole number greater than zero
