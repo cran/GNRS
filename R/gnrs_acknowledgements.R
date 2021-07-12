@@ -1,28 +1,28 @@
-#'Get metadata on current GNRS version
+#'Get acknowledgment information
 #'
-#'Return metadata about the current GNRS version
-#' @return Dataframe containing current GNRS version number, build date, and code version.
+#'Return information needed to acknowledge GNRS contributors
+#' @return Dataframe containing acknowledgments
 #' @import RCurl
 #' @importFrom jsonlite toJSON fromJSON
 #' @export
 #' @examples \dontrun{
-#' GNRS_version_metadata <- GNRS_version()
+#' GNRS_acknowledgments_metadata <- GNRS_acknowledgments()
 #' }
 #' 
-GNRS_version <- function(){
+GNRS_acknowledgments <- function(){
   
   # Check for internet access
   if (!is.character(getURL("www.google.com"))) {
     message("This function requires internet access, please check your connection.")
     return(invisible(NULL))
   }
-
+  
   # api url
-  url = "http://vegbiendev.nceas.ucsb.edu:8875/gnrs_api.php" # production
-  #url = "http://vegbiendev.nceas.ucsb.edu:9875/gnrs_api.php" # development
+  #url = "http://vegbiendev.nceas.ucsb.edu:8875/gnrs_api.php" # production
+  url = "http://vegbiendev.nceas.ucsb.edu:9875/gnrs_api.php" # development
   
   # set option mode.
-  mode <- "meta"		
+  mode <- "collaborators"		
   
   # Construct the request
   headers <- list('Accept' = 'application/json', 'Content-Type' = 'application/json', 'charset' = 'UTF-8')
@@ -52,9 +52,10 @@ GNRS_version <- function(){
   #Return NULL if API isn't working
   if(is.null(results_json)){return(invisible(NULL))}
   
+  
   # Format the results
   results <- fromJSON(results_json)
   
   return(results)
   
-}#TNRS version
+}#GNRS sources

@@ -1,15 +1,15 @@
-#'Get metadata on current GNRS version
+#'Get metadata on current GNRS sources
 #'
 #'Return metadata about the current GNRS version
-#' @return Dataframe containing current GNRS version number, build date, and code version.
+#' @return Dataframe containing current GNRS sources.
 #' @import RCurl
 #' @importFrom jsonlite toJSON fromJSON
 #' @export
 #' @examples \dontrun{
-#' GNRS_version_metadata <- GNRS_version()
+#' GNRS_sources_metadata <- GNRS_sources()
 #' }
 #' 
-GNRS_version <- function(){
+GNRS_sources <- function(){
   
   # Check for internet access
   if (!is.character(getURL("www.google.com"))) {
@@ -18,11 +18,11 @@ GNRS_version <- function(){
   }
 
   # api url
-  url = "http://vegbiendev.nceas.ucsb.edu:8875/gnrs_api.php" # production
-  #url = "http://vegbiendev.nceas.ucsb.edu:9875/gnrs_api.php" # development
+  #url = "http://vegbiendev.nceas.ucsb.edu:8875/gnrs_api.php" # production
+  url = "http://vegbiendev.nceas.ucsb.edu:9875/gnrs_api.php" # development
   
   # set option mode.
-  mode <- "meta"		
+  mode <- "sources"		
   
   # Construct the request
   headers <- list('Accept' = 'application/json', 'Content-Type' = 'application/json', 'charset' = 'UTF-8')
@@ -44,10 +44,10 @@ GNRS_version <- function(){
   
   # Send the request in a "graceful failure" wrapper for CRAN compliance
   tryCatch(expr =results_json <-  postForm(url, .opts=list(postfields= input_json, httpheader=headers)),
-           error = function(e) {
-             message("There appears to be a problem reaching the API.") 
-             return(NULL)
-           })
+                           error = function(e) {
+                             message("There appears to be a problem reaching the API.") 
+                             return(NULL)
+                           })
   
   #Return NULL if API isn't working
   if(is.null(results_json)){return(invisible(NULL))}
@@ -57,4 +57,4 @@ GNRS_version <- function(){
   
   return(results)
   
-}#TNRS version
+}#GNRS sources
