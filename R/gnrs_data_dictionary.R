@@ -1,23 +1,26 @@
-#'Get acknowledgment information
+#'Get Data Dictionary
 #'
-#'Return information needed to acknowledge GNRS contributors
+#'Return GNRS Data Dictionary
 #' @param ... Additional parameters passed to internal functions
-#' @return Dataframe containing acknowledgments
+#' @return Dataframe containing GNRS Data Dictionary
 #' @import httr
 #' @importFrom jsonlite toJSON fromJSON
 #' @export
 #' @examples \dontrun{
-#' GNRS_acknowledgments_metadata <- GNRS_acknowledgments()
+#' GNRS_dictionary <- GNRS_data_dictionary()
 #' }
 #' 
-GNRS_acknowledgments <- function(...){
+GNRS_data_dictionary <- function(...){
   
-  # Check for internet access
+  # # Check for internet access
   if (!check_internet()) {
     message("This function requires internet access, please check your connection.")
     return(invisible(NULL))
   }
-
-  return(gnrs_core(mode = "collaborators", ...))
-
+  
+  return(gnrs_core(mode = "dd", ...))
+  
+  # set option mode.
+  mode <- "dd"		
+   
 }#GNRS sources
