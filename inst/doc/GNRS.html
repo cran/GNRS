@@ -12,7 +12,7 @@
 
 <meta name="author" content="Brian Maitner" />
 
-<meta name="date" content="2021-10-04" />
+<meta name="date" content="2021-10-07" />
 
 <title>GNRS R package</title>
 
@@ -141,43 +141,66 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">GNRS R package</h1>
 <h4 class="author">Brian Maitner</h4>
-<h4 class="date">2021-10-04</h4>
+<h4 class="date">2021-10-07</h4>
 
 
 
 <div id="geographic-name-resolution-service" class="section level2">
 <h2>Geographic Name Resolution Service</h2>
-<p>The package <code>GNRS</code> is designed to interact with the Geographic Name Resolution Service of the Botanical Information and Ecology Network.</p>
-<p>#Installing GNRS</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install_github</span>(<span class="st">&quot;EnquistLab/RGNRS&quot;</span>)</span></code></pre></div>
-<p>#The easiest case: one political division</p>
+<p>The package <code>GNRS</code> is designed to interact with the Geographic Name Resolution Service API (GNRS; <a href="https://gnrs.biendata.org/" class="uri">https://gnrs.biendata.org/</a>) of the Botanical Information and Ecology Network (BIEN; <a href="https://bien.nceas.ucsb.edu" class="uri">https://bien.nceas.ucsb.edu</a>). The GNRS is a tool for resolving, standardizing, and indexing political division names. The GNRS resolves political division names against standard world political units in the Geonames (<a href="https://www.geonames.org/" class="uri">https://www.geonames.org/</a>) and Global Administrative Areas (GADM; <a href="https://gadm.org/" class="uri">https://gadm.org/</a>) databases. Names are resolved to three levels: country, state/province and county/parish. The GNRS uses both exact and fuzzy matching to match starndard and alternative political division names in a variety of languages, as well as abbreviations and codes such as ISO and FIPS codes. Results returned by the GNRS include the original names submitted, the standard names and codes of the political units matched, unique identifiers from the Geonames and GADM databases, and additional fields describe how each name was resolved. An overall match score from 0-1 describes how closely the submitted names matches standard names, where 1 is a perfect match.</p>
+</div>
+<div id="installing-the-gnrs-package" class="section level1">
+<h1>Installing the GNRS package</h1>
+<p>The current, stable version of the GNRS package is available on CRAN, while the development version can be installed from Github using devtools.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># To install the stable version from CRAN</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;GNRS&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># To install the development version from Github</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">install_github</span>(<span class="st">&quot;EnquistLab/RGNRS&quot;</span>)</span></code></pre></div>
+</div>
+<div id="standardizing-a-single-name" class="section level1">
+<h1>Standardizing a single name</h1>
+<p>In some cases, we may only want to standardize a single name. Say, we’d like to check what the standardized name for the United States of America is. Or perhaps we’d like to get the standardized name for the Canadian province of Quebec. We can use the function <code>GNRS_super_simple</code> for this.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GNRS)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">GNRS_super_simple</span>(<span class="at">country =</span>  <span class="st">&quot;United States&quot;</span>, </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">state_province =</span> <span class="st">&quot;Arizona&quot;</span>,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">county_parish =</span> <span class="st">&quot;Pima County&quot;</span>)</span></code></pre></div>
-<pre><code>##                         poldiv_full country_verbatim state_province_verbatim
-## 1 United States@Arizona@Pima County    United States                 Arizona
-##   state_province_verbatim_alt county_parish_verbatim county_parish_verbatim_alt
-## 1                                        Pima County                       Pima
-##         country state_province county_parish country_id state_province_id
-## 1 United States        Arizona          Pima    6252001           5551752
-##   county_parish_id country_iso state_province_iso county_parish_iso geonameid
-## 1          5308878          US                 AZ               019   5308878
-##   gid_0   gid_1      gid_2 match_method_country match_method_state_province
-## 1   USA USA.3_1 USA.3.11_1  exact standard name                  exact name
-##   match_method_county_parish match_score_country match_score_state_province
-## 1                 exact name                1.00                       1.00
-##   match_score_county_parish overall_score poldiv_submitted poldiv_matched
-## 1                      1.00          1.00    county_parish  county_parish
-##   match_status user_id
-## 1   full match       1</code></pre>
-<p>#Multiple political divisions</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#First, we&#39;ll load the test data that are included with this package, gnrs_testfile</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>gnrs_testfile <span class="ot">&lt;-</span> gnrs_testfile</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gnrs_testfile, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardizing a single country</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>USA_standardized <span class="ot">&lt;-</span> <span class="fu">GNRS_super_simple</span>(<span class="at">country =</span> <span class="st">&quot;United States of America&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Take a look at the columns returned</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(USA_standardized)</span></code></pre></div>
+<pre><code>##  [1] &quot;poldiv_full&quot;                 &quot;country_verbatim&quot;           
+##  [3] &quot;state_province_verbatim&quot;     &quot;state_province_verbatim_alt&quot;
+##  [5] &quot;county_parish_verbatim&quot;      &quot;county_parish_verbatim_alt&quot; 
+##  [7] &quot;country&quot;                     &quot;state_province&quot;             
+##  [9] &quot;county_parish&quot;               &quot;country_id&quot;                 
+## [11] &quot;state_province_id&quot;           &quot;county_parish_id&quot;           
+## [13] &quot;country_iso&quot;                 &quot;state_province_iso&quot;         
+## [15] &quot;county_parish_iso&quot;           &quot;geonameid&quot;                  
+## [17] &quot;gid_0&quot;                       &quot;gid_1&quot;                      
+## [19] &quot;gid_2&quot;                       &quot;match_method_country&quot;       
+## [21] &quot;match_method_state_province&quot; &quot;match_method_county_parish&quot; 
+## [23] &quot;match_score_country&quot;         &quot;match_score_state_province&quot; 
+## [25] &quot;match_score_county_parish&quot;   &quot;overall_score&quot;              
+## [27] &quot;poldiv_submitted&quot;            &quot;poldiv_matched&quot;             
+## [29] &quot;match_status&quot;                &quot;user_id&quot;</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The most useful columns in this case are country and overall_score</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>USA_standardized[<span class="fu">c</span>(<span class="st">&quot;country&quot;</span>,<span class="st">&quot;overall_score&quot;</span>,<span class="st">&quot;match_method_country&quot;</span>)]</span></code></pre></div>
+<pre><code>##         country overall_score match_method_country
+## 1 United States          1.00 exact alternate name</code></pre>
+<p>In this case, the standardized name is just “United States”. We have high confidence in this name because it matched perfectly (overall_score = 1.00) to an alternate name for “United States of America”. Note that even though we didn’t supply any state/province or country/parish names, there are still fields returned for these. This is because, when resolving names, the output is always identical, but may be empty.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardizing a single state</span></span></code></pre></div>
+</div>
+<div id="multiple-political-divisions" class="section level1">
+<h1>Multiple political divisions</h1>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#First, we&#39;ll load the test data that are included with this package, gnrs_testfile</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>gnrs_testfile <span class="ot">&lt;-</span> gnrs_testfile</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gnrs_testfile, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
 <pre><code>##    user_id   country          state_province
 ## 1        1    Russia                 Lipetsk
 ## 2        2    Mexico       Sonora, Estado de
@@ -201,10 +224,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 9                       Novovodolaz&#39;kyi
 ## 10</code></pre>
 <p>As you can see, the sample data include spelling variants (USA vs U.S.A.) and non-standard characters that may cause problems. The GNRS will standardize these spelling variants and non-standard characters.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>gnrs_results <span class="ot">&lt;-</span> <span class="fu">GNRS</span>(gnrs_testfile)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#The standardized names are found in these columns:</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gnrs_results[<span class="fu">c</span>(<span class="st">&quot;country&quot;</span>,<span class="st">&quot;state_province&quot;</span>,<span class="st">&quot;county_parish&quot;</span>)], <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>gnrs_results <span class="ot">&lt;-</span> <span class="fu">GNRS</span>(gnrs_testfile)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#The standardized names are found in these columns:</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gnrs_results[<span class="fu">c</span>(<span class="st">&quot;country&quot;</span>,<span class="st">&quot;state_province&quot;</span>,<span class="st">&quot;county_parish&quot;</span>)], <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
 <pre><code>##          country      state_province    county_parish
 ## 1         Russia  Lipetskaya Oblast&#39; Dobrovskiy Rayon
 ## 2         Mexico              Sonora                 
@@ -217,7 +240,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 9        Ukraine Kharkivs&#39;ka Oblast&#39;  Novovodolaz&#39;kyi
 ## 10        Canada         Nova Scotia</code></pre>
 <p>The GNRS function expects 4 columns as input, but all are optional. If you ever forget, you can use the function GNRS_template as a quick look-up, or as a template to populate</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">GNRS_template</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">GNRS_template</span>())</span></code></pre></div>
 <pre><code>##   user_id country state_province county_parish
 ## 1      NA      NA             NA            NA</code></pre>
 </div>

@@ -3,16 +3,36 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  
+#  # To install the stable version from CRAN
+#  install.packages("GNRS")
+#  
+#  # To install the development version from Github
+#  
 #  library(devtools)
 #  install_github("EnquistLab/RGNRS")
 #  
 #  
 
 ## -----------------------------------------------------------------------------
+
 library(GNRS)
-GNRS_super_simple(country =  "United States", 
-                 state_province = "Arizona",
-                 county_parish = "Pima County")
+
+
+# Standardizing a single country
+
+USA_standardized <- GNRS_super_simple(country = "United States of America")
+
+# Take a look at the columns returned
+colnames(USA_standardized)
+
+# The most useful columns in this case are country and overall_score
+USA_standardized[c("country","overall_score","match_method_country")]
+
+
+## -----------------------------------------------------------------------------
+
+# Standardizing a single state
+
 
 
 
