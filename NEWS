@@ -2,6 +2,17 @@
 GNRS 0.3.3
 ===============
 ## NEW FEATURES
+* Rather than skipping tests when on CRAN or Offline, most are now handled using vcr to cache API responses
+
+## BUG FIXES
+* Fixed potential source of errors when testing on CRAN for a few tests that I failed to skip on CRAN
+
+
+
+===============
+GNRS 0.3.3
+===============
+## NEW FEATURES
 
 ## BUG FIXES
 * Updated tests to be skipped when run on CRAN in order to prevent errors when server is temporarily down.
